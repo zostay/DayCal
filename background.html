@@ -1,0 +1,79 @@
+<!--
+    DayCal clock and calendar extension for Google Chrome.
+    Copyright (C) 2010  Qubling Software LLC
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<html>
+    <body>
+        <canvas id="icon" height="19" width="19"></canvas>
+
+        <script>
+            var run_number = 0;
+
+            var iconWidth  = 19;
+            var iconHeight = 19;
+
+            var month_names = [
+                'JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN',
+                'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'
+            ];
+
+            function update_icon() {
+                run_number++;
+
+                var canvas = document.getElementById('icon');
+                var ctx    = canvas.getContext('2d');
+
+                ctx.fillStyle    = '#FFFFFF';
+                ctx.lineWidth    = 1;
+                ctx.strokeStyle  = '#000000';
+
+                var now = new Date();
+
+                ctx.fillRect(0, 0, iconWidth, iconHeight);
+
+                ctx.font         = 'bold 9px sans-serif';
+                ctx.textAlign    = 'center';
+                ctx.textBaseline = 'top';
+                ctx.fillStyle    = '#999999';
+                ctx.fillText(month_names[now.getMonth()], iconWidth / 2, -1);
+
+                ctx.font         = 'bold 11px sans-serif';
+                ctx.textAlign    = 'center';
+                ctx.textBaseline = 'top';
+                ctx.fillStyle    = '#000000';
+                ctx.fillText(now.getDate(), iconWidth / 2, 0);
+
+                ctx.fillStyle    = '#660000';
+                ctx.fillRect(0, iconHeight - 7, iconWidth, 7);
+
+                ctx.font         = 'bold 7px sans-serif';
+                ctx.textAlign    = 'center';
+                ctx.textBaseline = 'bottom';
+                ctx.fillStyle    = '#FFFFFF';
+                var minutes = now.getMinutes();
+                if (minutes < 10) minutes = "0" + minutes;
+                ctx.fillText(now.getHours() + ':' + minutes, iconWidth / 2, iconHeight + 1);
+
+                var image = ctx.getImageData(0, 0, iconWidth, iconHeight);
+                chrome.browserAction.setIcon({ imageData: image });
+            };
+
+            update_icon();
+            setInterval(update_icon, 15000);
+        </script>
+    </body>
+</html>
