@@ -70,6 +70,7 @@
 
                 var image = ctx.getImageData(0, 0, iconWidth, iconHeight);
                 chrome.browserAction.setIcon({ imageData: image });
+                chrome.browserAction.setTitle({ title: now.toLocaleString() });
             };
 
             update_icon();
